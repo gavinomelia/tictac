@@ -3,6 +3,11 @@ defmodule TictacTest do
   doctest Tictac
 
   test "greets the world" do
-    assert Tictac.hello() == :world
+    assert Tictac.new_board() == [[nil, nil, nil],[nil, nil, nil],[nil, nil, nil]]
+    # [
+    #   ['X', None, 'O'],
+    #   ['O', None, None],
+    #   [None, 'X', 'X']
+    # ]
   end
 end
