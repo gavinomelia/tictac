@@ -1,24 +1,14 @@
 defmodule Board do
-  def new_board, do: [[nil, nil, nil],[nil, nil, nil],[nil, nil, nil]]
-
   def render(board) do
-    a = Enum.at(board, 0)
-    b = Enum.at(board, 1)
-    c = Enum.at(board, 2)
-
     IO.puts("""
-    1  2  3
-    ------
-    1 |#{get_row(a)}|
-    2 |#{get_row(b)}|
-    3 |#{get_row(c)}|
-    ------
+      1  2  3
+      ------
+    1 |#{board[{1,1}]} #{board[{2,1}]} #{board[{3,1}]}|
+    2 |#{board[{1,2}]} #{board[{2,2}]} #{board[{3,2}]}|
+    3 |#{board[{1,3}]} #{board[{2,3}]} #{board[{3,3}]}|
+      ------
     """)
     board
-  end
-
-  def get_row(row) do
-    "#{Enum.at(row, 0)}  #{Enum.at(row, 1)}  #{Enum.at(row, 2)}"
   end
 
   def get_move do
@@ -28,15 +18,13 @@ defmodule Board do
   end
 
   def make_move(board, {x,y}, player) do
-    updated_row = List.replace_at(Enum.at(board, y-1), x-1, player)
-    _updated_board = List.replace_at(board, y-1,  updated_row)
+    Map.put(board, {x,y}, player)
   end
-
 end
 
 defmodule Game do
   def begin_game do
-    Board.new_board
+    %{{1,1} => nil, {1,2} => nil, {1,3} => nil, {2,1} => nil, {2,2} => nil, {2,3} => nil, {3,1} => nil, {3,2} => nil, {3,3} => nil}
     |> Board.render
     |> get_move("X")
   end
@@ -49,19 +37,30 @@ defmodule Game do
   end
 
   def next_move(board, "X") do
-    get_winner(board)
-    IO.puts "It is Y's move!"
-    get_move(board, "Y")
+    if Enum.all?(get_winner(board), fn(x) -> x == nil end) do
+      IO.puts "It is Y's move!"
+      get_move(board, "Y")
+    end
   end
   def next_move(board, "Y") do
-    get_winner(board)
-    IO.puts "It is X's move!"
-    get_move(board, "X")
+    if Enum.all?(get_winner(board), fn(x) -> x == nil end) do
+      IO.puts "It is X's move!"
+      get_move(board, "X")
+    end
   end
 
   def get_winner(board) do
-    # board |> IO.inspect
+    lines = [[{1,1}, {2,1}, {3,1}], [{1,2}, {2,2}, {3,2}], [{1,3}, {2,3}, {3,3}],
+    [{1,1}, {1,2}, {1,3}], [{2,1}, {2,2}, {2,3}], [{3,1}, {3,2}, {3,3}],
+    [{1,1}, {2,2}, {3,3}], [{1,3}, {2,2}, {3,1}]]
+
+    Enum.map(lines, fn(x) -> Map.take(board, x) |> Map.values |> winners end)
   end
+
+  def winners(["X", "X", "X"]), do: IO.puts("X is victorious! Congradulations!")
+  def winners(["Y", "Y", "Y"]), do: IO.puts("Y is victorious! Congradulations!")
+  def winners(_), do: nil
+
 
 
 end
