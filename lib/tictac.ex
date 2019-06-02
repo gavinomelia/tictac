@@ -49,12 +49,18 @@ defmodule Game do
     end
   end
 
+
   def get_winner(board) do
     lines = [[{1,1}, {2,1}, {3,1}], [{1,2}, {2,2}, {3,2}], [{1,3}, {2,3}, {3,3}],
     [{1,1}, {1,2}, {1,3}], [{2,1}, {2,2}, {2,3}], [{3,1}, {3,2}, {3,3}],
     [{1,1}, {2,2}, {3,3}], [{1,3}, {2,2}, {3,1}]]
 
-    Enum.map(lines, fn(x) -> Map.take(board, x) |> Map.values |> winners end)
+    winner_list = Enum.map(lines, fn(x) -> Map.take(board, x) |> Map.values |> winners end)
+
+    if Enum.all?(Map.values(board), &(&1)) do
+      IO.puts("The game is a draw!")
+    end
+    winner_list
   end
 
   def winners(["X", "X", "X"]), do: IO.puts("X is victorious! Congradulations!")
@@ -64,5 +70,3 @@ defmodule Game do
 
 
 end
-
-Game.begin_game
