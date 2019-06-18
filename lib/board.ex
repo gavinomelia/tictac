@@ -12,20 +12,27 @@ defmodule Board do
   end
 
   def get_move do
-    {get_x, get_y}
+    {get_x(), get_y()}
   end
 
-  def get_x, do: IO.gets("What is the X cordinate of your move? ") |> String.trim |> Integer.parse |> check(:x)
-  def get_y, do: IO.gets("What is the Y cordinate of your move? ") |> String.trim |> Integer.parse |> check(:y)
+  def get_x(), do: IO.gets("What is the X cordinate of your move? ") |> String.trim |> Integer.parse |> check(:x)
+  def get_y(), do: IO.gets("What is the Y cordinate of your move? ") |> String.trim |> Integer.parse |> check(:y)
 
-  def check({int, _}, _), do: int
+  def check({int, _}, letter), do: off_the_board?(int, letter)
   def check(_, letter) do
+    invalid(letter)
+  end
+
+  def off_the_board?(int, _) when int in [1, 2, 3], do: int
+  def off_the_board?(_, letter), do: invalid(letter)
+
+  def invalid(:x) do
     IO.puts "That is not a valid move. Try again."
-    if letter == :x do
-      get_x
-    else
-      get_y
-    end
+    get_x()
+  end
+  def invalid(:y) do
+    IO.puts "That is not a valid move. Try again."
+    get_y()
   end
 
   def make_move(board, {x,y}, player) do
