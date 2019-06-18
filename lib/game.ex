@@ -14,13 +14,13 @@ defmodule Game do
 
   def next_move(board, "X") do
     if Enum.all?(get_winner(board), fn(x) -> x == nil end) do
-      IO.puts "It is Y's move!"
+      IO.puts "It is Y's move!\n"
       get_move(board, "Y")
     end
   end
   def next_move(board, "Y") do
     if Enum.all?(get_winner(board), fn(x) -> x == nil end) do
-      IO.puts "It is X's move!"
+      IO.puts "It is X's move!\n"
       get_move(board, "X")
     end
   end

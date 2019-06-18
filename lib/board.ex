@@ -1,7 +1,7 @@
 defmodule Board do
   def render(board) do
     IO.puts("""
-    1  2  3
+    \n1  2  3
     ------
     1 |#{board[{1,1}]} #{board[{2,1}]} #{board[{3,1}]}|
     2 |#{board[{1,2}]} #{board[{2,2}]} #{board[{3,2}]}|
@@ -18,10 +18,8 @@ defmodule Board do
   def get_x, do: IO.gets("What is the X cordinate of your move? ") |> String.trim |> Integer.parse |> check(:x)
   def get_y, do: IO.gets("What is the Y cordinate of your move? ") |> String.trim |> Integer.parse |> check(:y)
 
-  def check({int, _}, _) do
-    IO.inspect(int, label: "NO issues!")
-  end
-  def check(tuple, letter) do
+  def check({int, _}, _), do: int
+  def check(_, letter) do
     IO.puts "That is not a valid move. Try again."
     if letter == :x do
       get_x
